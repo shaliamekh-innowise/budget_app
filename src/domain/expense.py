@@ -7,6 +7,7 @@ from src.domain.category import Category
 
 @dataclass
 class Expense:
+    user_id: UUID
     name: str
     category: Category
     price: float

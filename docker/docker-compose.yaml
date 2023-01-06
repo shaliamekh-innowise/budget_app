@@ -1,0 +1,37 @@
+---
+version: '3.8'
+
+services:
+  budget-db:
+    image: postgres:14.5
+    container_name: budget-pg
+    ports:
+      - "5450:5432"
+    environment:
+      POSTGRES_USER: budget
+      POSTGRES_PASSWORD: budget
+      POSTGRES_DB: budget
+    volumes:
+      - pgdata_budget:/var/lib/postgresql/data
+  budget:
+    platform: linux/x86_64
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--reload"]
+    container_name: budget
+    volumes:
+      - ../src:/src
+    ports:
+      - "8050:8000"
+    environment:
+      - API_ENVIRONMENT=${API_ENVIRONMENT}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost:8000/healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - budget-db
+volumes:
+  pgdata_budget:
