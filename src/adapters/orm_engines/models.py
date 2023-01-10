@@ -7,18 +7,17 @@ Base = declarative_base()
 
 class CategoryORM(Base):
     __tablename__ = "category"
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    name = Column(String, nullable=False)
+    name = Column(String, primary_key=True)
     priority = Column(Integer, default=2)
 
 
-class BudgetORM(Base):
-    __tablename__ = "budget"
+class ExpenseORM(Base):
+    __tablename__ = "expense"
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
     user_id = Column(UUID(as_uuid=True), nullable=False)
     name = Column(String, nullable=False)
-    category_id = Column(UUID(as_uuid=True), ForeignKey("category.id", ondelete="SET NULL"))
+    category_name = Column(String, ForeignKey("category.name", ondelete="SET NULL"))
     category = relationship("CategoryORM", uselist=False)
     price = Column(Float, default=0)
     quantity = Column(Integer, default=1)
