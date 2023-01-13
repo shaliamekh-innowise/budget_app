@@ -13,6 +13,8 @@ services:
       POSTGRES_DB: budget
     volumes:
       - pgdata_budget:/var/lib/postgresql/data
+    networks:
+      - budget-app-network
   budget:
     platform: linux/x86_64
     build:
@@ -33,5 +35,10 @@ services:
       retries: 5
     depends_on:
       - budget-db
+    networks:
+     - budget-app-network
+networks:
+  budget-app-network:
+    external: true
 volumes:
   pgdata_budget:
