@@ -18,7 +18,7 @@ class ExpenseORM(Base):
     user_id = Column(UUID(as_uuid=True), nullable=False)
     name = Column(String, nullable=False)
     category_name = Column(String, ForeignKey("category.name", ondelete="SET NULL"))
-    category = relationship("CategoryORM", uselist=False)
+    category = relationship("CategoryORM", uselist=False, lazy="selectin")
     price = Column(Float, default=0)
     quantity = Column(Integer, default=1)
     price_usd = Column(Float, default=0)

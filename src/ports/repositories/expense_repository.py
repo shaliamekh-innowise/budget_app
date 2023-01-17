@@ -14,3 +14,7 @@ class ExpenseRepository(ABC):
     @abstractmethod
     async def get_statistics(self, user_id: UUID) -> Statistics:
         pass
+
+    @abstractmethod
+    async def find_by_uuid(self, uuid: UUID) -> Expense:
+        pass

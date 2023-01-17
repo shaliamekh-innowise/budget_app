@@ -29,6 +29,18 @@ async def test_expense_save_to_db_success(expense_repository, session):
     assert expense_id is not None
 
 
-
-
-
+@pytest.mark.asyncio
+async def test_expense_find_by_id_success(expense_repository: SQLAlchemyExpenseRepository, session):
+    session.add(CategoryORM(name="Food", priority=2))
+    session.commit()
+    expense = Expense(
+        name="Cat food",
+        category=Category(name="Food", priority=Priority.MEDIUM),
+        price=17.50,
+        price_usd=17.50,
+        user_id=uuid.uuid4(),
+        quantity=1,
+    )
+    expense.id = await expense_repository.save_expense(expense)
+    expense_from_db = await expense_repository.find_by_uuid(expense.id)
+    assert expense_from_db == expense

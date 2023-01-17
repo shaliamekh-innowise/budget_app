@@ -1,9 +1,11 @@
 from uuid import UUID
 
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 
 from adapters.orm_engines import models
-from core.exceptions import DatabaseConnectionException
+from core.exceptions import DatabaseConnectionException, ExpenseNotFoundException
+from domain.category import Category, Priority
 from domain.expense import Expense
 from domain.statistics import Statistics
 from ports.repositories.expense_repository import ExpenseRepository
@@ -37,4 +39,21 @@ class SQLAlchemyExpenseRepository(ExpenseRepository):
     async def get_statistics(self, user_id: UUID) -> Statistics:
         pass
 
-
+    async def find_by_uuid(self, uuid: UUID) -> Expense:
+        try:
+            query = select(models.ExpenseORM).where(models.ExpenseORM.id == uuid)
+            result = await self.db.execute(query)
+            if expense_db := result.scalars().first():
+                expense = Expense(
+                    user_id=expense_db.user_id,
+                    name=expense_db.name,
+                    category=Category(name=expense_db.category_name, priority=Priority(expense_db.category.priority)),
+                    price=expense_db.price,
+                    price_usd=expense_db.price_usd,
+                    quantity=expense_db.quantity,
+                    id=expense_db.id
+                )
+                return expense
+            raise ExpenseNotFoundException
+        except SQLAlchemyError as e:
+            raise DatabaseConnectionException
