@@ -1,4 +1,4 @@
-from src.ports.external_api.rate_api import RateAPI
+from ports.external_api.rate_api import RateAPI
 
 
 class FakeRateApi(RateAPI):

@@ -2,16 +2,16 @@ from dataclasses import dataclass
 from typing import Optional
 from uuid import UUID
 
-from src.domain.category import Category
+from domain.category import Category
 
 
 @dataclass
 class Expense:
     user_id: UUID
     name: str
-    category: Category
     price: float
     quantity: int = 1
+    category: Category = None
     id: Optional[UUID] = None
     price_usd: Optional[float] = None
 

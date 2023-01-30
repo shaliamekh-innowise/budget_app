@@ -1,9 +1,9 @@
 from uuid import UUID
 
-from src.domain.expense import Expense
-from src.domain.statistics import Statistics
-from src.ports.external_api.rate_api import RateAPI
-from src.ports.repositories.expense_repository import ExpenseRepository
+from domain.expense import Expense
+from domain.statistics import Statistics
+from ports.external_api.rate_api import RateAPI
+from ports.repositories.expense_repository import ExpenseRepository
 
 
 class ExpenseManagementUsecase:

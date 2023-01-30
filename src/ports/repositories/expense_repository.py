@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from src.domain.expense import Expense
-from src.domain.statistics import Statistics
+from domain.expense import Expense
+from domain.statistics import Statistics
 
 
 class ExpenseRepository(ABC):
