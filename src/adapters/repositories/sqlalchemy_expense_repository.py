@@ -32,7 +32,7 @@ class SQLAlchemyExpenseRepository(ExpenseRepository):
             await self.db.commit()
             await self.db.refresh(expense_db)
             return expense_db.id
-        except Exception:
+        except Exception as e:
             await self.db.rollback()
             raise DatabaseConnectionException
 

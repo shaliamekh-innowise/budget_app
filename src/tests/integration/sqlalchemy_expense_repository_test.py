@@ -1,16 +1,22 @@
 import uuid
 
 import pytest
+import pytest_asyncio
+from sqlalchemy import delete
 
+from adapters.orm_engines import models
 from adapters.orm_engines.models import CategoryORM
 from adapters.repositories.sqlalchemy_expense_repository import SQLAlchemyExpenseRepository
 from domain.category import Category, Priority
 from domain.expense import Expense
 
 
-@pytest.fixture
-def expense_repository(session):
-    return SQLAlchemyExpenseRepository(session)
+@pytest_asyncio.fixture
+async def expense_repository(session):
+    repository = SQLAlchemyExpenseRepository(session)
+    yield repository
+    await repository.db.execute(delete(models.ExpenseORM))
+    await repository.db.execute(delete(models.CategoryORM))
 
 
 @pytest.mark.asyncio

@@ -23,3 +23,6 @@ class InMemoryExpenseRepository(ExpenseRepository):
             expense_count=len(user_expenses),
             expense_total_amount=sum([expense.price for expense in user_expenses]),
         )
+
+    async def find_by_uuid(self, uuid: uuid.UUID) -> Expense:
+        pass
